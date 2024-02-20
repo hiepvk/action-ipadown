@@ -11,36 +11,36 @@ on:
   workflow_dispatch:
     inputs:
       appleId:
-        description: 'Apple ID Account'
+        description: 'Tài khoản ID Apple'
         required: true
       appleIdPwd:
-        description: 'Apple ID Password'
+        description: 'Mật khẩu ID Apple'
         required: true
       operation:
-        description: 'Operation to do, choices: lookup, historyver, download, historyver_id, download_id'
+        description: 'Thao tác cần làm, lựa chọn: lookup, historyver, download, historyver_id, download_id'
       
       appBundleId:
-        description: 'AppStore Bundle-ID (needed when using non-*_id operations)'
+        description: 'Bundle-ID Ứng dụng muốn tải (VD: com.google.ios.youtube)'
         required: false
       appCountry:
-        description: 'AppStore Country (needed when using non-*_id operations)'
+        description: 'Tải ứng dụng ở quốc gia (VD: VN: Việt Nam, US: Hoa Kỳ, JP: Nhật Bản)'
         required: false
-        default: 'JP'
+        default: 'VN'
       
       appVerId:
-        description: 'App Version Id Number (for downloading history versions)'
+        description: 'Số ID phiên bản ứng dụng (để tải xuống các phiên bản thấp hơn,)'
         required: false
 
       appId:
-        description: 'App Id Number (needed when using *_id operations)'
+        description: 'Số ID ứng dụng (Bỏ qua nếu dùng Bundle-ID)'
         required: false
       
       debug_enabled:
-        description: 'Run the build with RDP debugging enabled'
+        description: 'Chạy bản dựng với tính năng gỡ lỗi RDP được bật'
         required: false
         default: false
       itunes_debug_enabled:
-        description: 'Run the build with ngrok debugging enabled'
+        description: 'Chạy bản dựng với tính năng gỡ lỗi ngrok'
         required: false
         default: false
 
@@ -62,13 +62,13 @@ jobs:
 
       - name: Setup ipatool-py
         run: |
-          git clone -b itunes_server https://github.com/NyaMisty/ipatool-py
+          git clone -b itunes_server https://github.com/hiepvk/ipatool-py
           pip3 install -r ipatool-py/requirements.txt
           mkdir -p ipaDown
         shell: bash
 
       - name: Setup iTunes Header Service
-        uses: NyaMisty/actions-iTunes-header@master
+        uses: hiepvk/actions-iTunes-header@master
         if: ${{ github.event.inputs.operation != 'lookup' }}
         with:
           apple_id: ${{ github.event.inputs.appleId }}
@@ -119,7 +119,7 @@ jobs:
         shell: bash
         
       - name: "Upload package"
-        uses: NyaMisty/upload-artifact-as-is@master
+        uses: hiepvk/upload-artifact-as-is@master
         with:
           path: ipaDown\*
 
